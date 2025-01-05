@@ -1,6 +1,8 @@
 #mood.py
 import random
 import pyttsx3
+from nltk.sentiment import SentimentIntensityAnalyzer
+from transformers import pipeline
 
 engine = pyttsx3.init("sapi5")
 voices = engine.getProperty("voices")
@@ -161,3 +163,24 @@ def general_responses():
     response = random.choice(responses)
     print(f"Thea: {response}")
     speak(response)
+
+def detect_mood_with_nltk(input_text):
+    sia = SentimentIntensityAnalyzer()
+    scores = sia.polarity_scores(input_text)
+    if scores['compound'] >= 0.05:
+        return "happy"
+    elif scores['compound'] <= -0.05:
+        return "sad"
+    else:
+        return "neutral"
+
+def detect_mood_with_huggingface(input_text):
+    sentiment_pipeline = pipeline("sentiment-analysis")
+    result = sentiment_pipeline(input_text)
+    label = result[0]['label']
+    if label == 'POSITIVE':
+        return "happy"
+    elif label == 'NEGATIVE':
+        return "sad"
+    else:
+        return "neutral"
