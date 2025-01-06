@@ -174,6 +174,7 @@ def detect_mood_with_nltk(input_text):
     else:
         return "neutral"
 
+#upgaraed the code to use huggingface model to detect the mood rather that the old one which was depended on a veriabel
 def detect_mood_with_huggingface(input_text):
     sentiment_pipeline = pipeline("sentiment-analysis")
     result = sentiment_pipeline(input_text)
